@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HR Article Generator | hrly.pl</title>
+  <meta name="description" content="Generuj profesjonalne artykuły HR z pomocą AI i publikuj je automatycznie na swoim blogu WordPress." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-icon">✦</div>
+        <span class="logo-text">HR<strong>Article</strong></span>
+      </div>
+      <div class="header-badge">AI Powered</div>
+    </div>
+  </header>
+
+  <main class="main">
+    <!-- HERO -->
+    <section class="hero">
+      <h1 class="hero-title">Generuj artykuły HR<br /><span class="gradient-text">w kilka sekund</span></h1>
+      <p class="hero-subtitle">Opisz temat, wybierz styl i długość — AI napisze profesjonalny artykuł gotowy do publikacji na Twoim blogu.</p>
+    </section>
+
+    <div class="app-grid">
+      <!-- FORMULARZ -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">📝</div>
+          <h2 class="card-title">Konfiguracja artykułu</h2>
+        </div>
+
+        <form id="generateForm" class="form">
+          <div class="form-group">
+            <label for="topic" class="form-label">Temat artykułu <span class="required">*</span></label>
+            <input
+              type="text"
+              id="topic"
+              class="form-input"
+              placeholder="np. Onboarding zdalnych pracowników w 2025 roku"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="category" class="form-label">Kategoria</label>
+            <select id="category" class="form-select">
+              <option value="">— Wybierz kategorię —</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Ton artykułu</label>
+              <div class="radio-group" id="toneGroup">
+                <label class="radio-card active" data-value="professional">
+                  <input type="radio" name="tone" value="professional" checked hidden />
+                  <span class="radio-icon">💼</span>
+                  <span class="radio-label">Profesjonalny</span>
+                </label>
+                <label class="radio-card" data-value="friendly">
+                  <input type="radio" name="tone" value="friendly" hidden />
+                  <span class="radio-icon">😊</span>
+                  <span class="radio-label">Przyjazny</span>
+                </label>
+                <label class="radio-card" data-value="expert">
+                  <input type="radio" name="tone" value="expert" hidden />
+                  <span class="radio-icon">🎓</span>
+                  <span class="radio-label">Ekspercki</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Długość artykułu</label>
+            <div class="length-group" id="lengthGroup">
+              <label class="length-card" data-value="short">
+                <input type="radio" name="length" value="short" hidden />
+                <span class="length-title">Krótki</span>
+                <span class="length-words">~500 słów</span>
+              </label>
+              <label class="length-card active" data-value="medium">
+                <input type="radio" name="length" value="medium" checked hidden />
+                <span class="length-title">Średni</span>
+                <span class="length-words">~1000 słów</span>
+              </label>
+              <label class="length-card" data-value="long">
+                <input type="radio" name="length" value="long" hidden />
+                <span class="length-title">Długi</span>
+                <span class="length-words">~1500 słów</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="focusKeyphrase" class="form-label">Fraza kluczowa SEO <span class="required">*</span></label>
+            <input
+              type="text"
+              id="focusKeyphrase"
+              class="form-input"
+              placeholder="np. onboarding nowych pracowników"
+            />
+            <small style="color: var(--text-dim); font-size: 0.75rem;">Główna fraza Yoast SEO — pojawi się w tytule, meta, slug i treści</small>
+          </div>
+
+          <div class="form-group">
+            <label for="keywords" class="form-label">Dodatkowe słowa kluczowe <span class="optional">(opcjonalne)</span></label>
+            <input
+              type="text"
+              id="keywords"
+              class="form-input"
+              placeholder="np. HR, wdrożenie, rekrutacja"
+            />
+          </div>
+
+          <button type="submit" id="generateBtn" class="btn btn-primary btn-full">
+            <span class="btn-icon">✦</span>
+            <span class="btn-text">Generuj artykuł</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- PODGLĄD ARTYKUŁU -->
+      <div class="card" id="previewCard">
+        <div class="card-header">
+          <div class="card-icon">👁️</div>
+          <h2 class="card-title">Podgląd artykułu</h2>
+          <div class="card-actions" id="cardActions" style="display:none">
+            <button id="copyBtn" class="btn btn-ghost btn-sm">📋 Kopiuj</button>
+          </div>
+        </div>
+
+        <div id="previewEmpty" class="preview-empty">
+          <div class="preview-empty-icon">✦</div>
+          <p>Wygenerowany artykuł pojawi się tutaj</p>
+        </div>
+
+        <div id="previewContent" class="preview-content" style="display:none">
+          <div id="researchBadge" class="research-badge" style="display:none">
+            <span class="research-icon">🔍</span>
+            <span>Artykuł oparty na aktualnym researchu z sieci</span>
+            <button id="toggleSources" class="sources-toggle">Pokaż źródła ▾</button>
+          </div>
+          <div id="researchSources" class="research-sources" style="display:none"></div>
+          <div class="article-meta">
+            <span id="metaCategory" class="meta-badge"></span>
+            <span id="metaWords" class="meta-words"></span>
+          </div>
+          <h2 id="articleTitle" class="article-title-preview" contenteditable="true"></h2>
+          <div class="meta-desc-row">
+            <span class="meta-desc-label">SEO Title:</span>
+            <span id="articleSeoTitle" class="article-meta-desc" contenteditable="true"></span>
+          </div>
+          <div class="meta-desc-row">
+            <span class="meta-desc-label">Meta opis:</span>
+            <span id="articleMeta" class="article-meta-desc" contenteditable="true"></span>
+          </div>
+          <div class="meta-desc-row">
+            <span class="meta-desc-label">Slug:</span>
+            <span id="articleSlug" class="article-meta-desc" contenteditable="true"></span>
+          </div>
+          <div class="meta-desc-row">
+            <span class="meta-desc-label">Fraza kluczowa:</span>
+            <span id="articleKeyphrase" class="article-meta-desc" contenteditable="true"></span>
+          </div>
+          <div id="articleContent" class="article-body" contenteditable="true"></div>
+          <div id="seoTips" class="seo-tips" style="display:none">
+            <div class="seo-tips-header">🎯 Wskazówki SEO</div>
+            <ul id="seoTipsList" class="seo-tips-list"></ul>
+          </div>
+          <div class="tags-row">
+            <span class="tags-label">Tagi:</span>
+            <div id="articleTags" class="tags-list"></div>
+          </div>
+        </div>
+
+        <!-- LOADING STATE -->
+        <div id="previewLoading" class="preview-loading" style="display:none">
+          <div class="loader-ring"></div>
+          <p class="loader-text">AI generuje artykuł…</p>
+          <p class="loader-subtext">Może to potrwać około 15–30 sekund</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PUBLISH SECTION -->
+    <div id="publishSection" class="publish-section" style="display:none">
+      <div class="card publish-card">
+        <div class="card-header">
+          <div class="card-icon">🚀</div>
+          <h2 class="card-title">Publikacja na WordPress</h2>
+        </div>
+        <p class="publish-desc">Artykuł zostanie opublikowany jako <strong>szkic</strong> na blogu hrly.pl. Będziesz mogła go edytować i opublikować z panelu WordPress.</p>
+        <div class="publish-row">
+          <button id="publishBtn" class="btn btn-publish">
+            <span class="btn-icon">📤</span>
+            <span class="btn-text">Opublikuj jako szkic</span>
+          </button>
+          <div id="publishStatus" class="publish-status"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>HR Article Generator • hrly.pl • Powered by Google Gemini AI</p>
+  </footer>
+
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
