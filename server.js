@@ -61,7 +61,7 @@ async function doWebResearch(topic, keywords) {
 
 // === POBIERZ ISTNIEJĄCE POSTY Z BLOGA (do linkowania wewnętrznego) ===
 async function fetchExistingPosts() {
-  const wpUrl = process.env.WORDPRESS_URL;
+  const wpUrl = (process.env.WORDPRESS_URL || "").replace("hrly.pl", "hrly.pl/wp").replace("/wp/wp", "/wp");
   const username = process.env.WORDPRESS_USERNAME;
   const appPassword = process.env.WORDPRESS_APP_PASSWORD;
   const credentials = Buffer.from(`${username}:${appPassword}`).toString('base64');
@@ -244,7 +244,7 @@ Odpowiedz WYŁĄCZNIE czystym JSON (bez markdown):
 app.post('/api/publish', async (req, res) => {
   const { title, content, meta_description, tags, category_id, status, slug, seo_title, focus_keyphrase } = req.body;
 
-  const wpUrl = process.env.WORDPRESS_URL;
+  const wpUrl = (process.env.WORDPRESS_URL || "").replace("hrly.pl", "hrly.pl/wp").replace("/wp/wp", "/wp");
   const username = process.env.WORDPRESS_USERNAME;
   const appPassword = process.env.WORDPRESS_APP_PASSWORD;
   const credentials = Buffer.from(`${username}:${appPassword}`).toString('base64');
